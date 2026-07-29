@@ -1,0 +1,381 @@
+{
+  "element": {
+    "sourceTag": "panel",
+    "type": "custom",
+    "children": [
+      {
+        "type": "container",
+        "sourceTag": "div",
+        "children": [
+          {
+            "type": "container",
+            "sourceTag": "div",
+            "children": [
+              "NEON DEFENDER VR"
+            ],
+            "properties": {
+              "name": "title",
+              "fontSize": "28",
+              "color": "#00ffff",
+              "fontWeight": "bold"
+            },
+            "dataUid": "uid-3"
+          },
+          {
+            "type": "container",
+            "sourceTag": "div",
+            "children": [
+              "Side-Scrolling Rescue Shooter"
+            ],
+            "properties": {
+              "fontSize": "12",
+              "color": "#668899"
+            },
+            "dataUid": "uid-4"
+          },
+          {
+            "type": "container",
+            "sourceTag": "div",
+            "children": [
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [
+                  "ARCADE MODE"
+                ],
+                "properties": {
+                  "name": "btn-arcade",
+                  "backgroundColor": "#004466",
+                  "borderRadius": "6",
+                  "padding": "8",
+                  "hoverBackgroundColor": "#006688",
+                  "cursor": "pointer",
+                  "fontSize": "14",
+                  "color": "#00ffff"
+                },
+                "dataUid": "uid-6"
+              },
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [
+                  "SPEED MODE (120s)"
+                ],
+                "properties": {
+                  "name": "btn-speed",
+                  "backgroundColor": "#444400",
+                  "borderRadius": "6",
+                  "padding": "8",
+                  "hoverBackgroundColor": "#666600",
+                  "cursor": "pointer",
+                  "fontSize": "14",
+                  "color": "#ffcc33"
+                },
+                "dataUid": "uid-7"
+              },
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [
+                  "ZEN MODE"
+                ],
+                "properties": {
+                  "name": "btn-zen",
+                  "backgroundColor": "#003300",
+                  "borderRadius": "6",
+                  "padding": "8",
+                  "hoverBackgroundColor": "#005500",
+                  "cursor": "pointer",
+                  "fontSize": "14",
+                  "color": "#33ff66"
+                },
+                "dataUid": "uid-8"
+              },
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [
+                  "CHALLENGE MODE"
+                ],
+                "properties": {
+                  "name": "btn-challenge",
+                  "backgroundColor": "#440022",
+                  "borderRadius": "6",
+                  "padding": "8",
+                  "hoverBackgroundColor": "#660033",
+                  "cursor": "pointer",
+                  "fontSize": "14",
+                  "color": "#ff33ff"
+                },
+                "dataUid": "uid-9"
+              }
+            ],
+            "properties": {
+              "flexDirection": "column",
+              "gap": "6",
+              "paddingTop": "10",
+              "alignItems": "center"
+            },
+            "dataUid": "uid-5"
+          },
+          {
+            "type": "container",
+            "sourceTag": "div",
+            "children": [
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [
+                  "Settings"
+                ],
+                "properties": {
+                  "name": "btn-settings",
+                  "backgroundColor": "#222233",
+                  "borderRadius": "4",
+                  "padding": "6",
+                  "cursor": "pointer",
+                  "fontSize": "11",
+                  "color": "#8899aa"
+                },
+                "dataUid": "uid-11"
+              },
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [
+                  "How to Play"
+                ],
+                "properties": {
+                  "name": "btn-tutorial",
+                  "backgroundColor": "#222233",
+                  "borderRadius": "4",
+                  "padding": "6",
+                  "cursor": "pointer",
+                  "fontSize": "11",
+                  "color": "#8899aa"
+                },
+                "dataUid": "uid-12"
+              }
+            ],
+            "properties": {
+              "flexDirection": "row",
+              "gap": "8",
+              "paddingTop": "8"
+            },
+            "dataUid": "uid-10"
+          },
+          {
+            "type": "container",
+            "sourceTag": "div",
+            "children": [
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [
+                  "Stats"
+                ],
+                "properties": {
+                  "name": "btn-stats",
+                  "backgroundColor": "#222233",
+                  "borderRadius": "4",
+                  "padding": "6",
+                  "cursor": "pointer",
+                  "fontSize": "11",
+                  "color": "#8899aa"
+                },
+                "dataUid": "uid-14"
+              },
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [
+                  "Achievements"
+                ],
+                "properties": {
+                  "name": "btn-achievements",
+                  "backgroundColor": "#222233",
+                  "borderRadius": "4",
+                  "padding": "6",
+                  "cursor": "pointer",
+                  "fontSize": "11",
+                  "color": "#8899aa"
+                },
+                "dataUid": "uid-15"
+              }
+            ],
+            "properties": {
+              "flexDirection": "row",
+              "gap": "8"
+            },
+            "dataUid": "uid-13"
+          }
+        ],
+        "properties": {
+          "name": "root",
+          "backgroundColor": "#000a14",
+          "borderRadius": "12",
+          "padding": "16",
+          "flexDirection": "column",
+          "alignItems": "center",
+          "gap": "8"
+        },
+        "dataUid": "uid-2"
+      }
+    ],
+    "properties": {},
+    "dataUid": "uid-1"
+  },
+  "classes": {},
+  "ranges": {
+    "uid-1": {
+      "start": {
+        "line": 0,
+        "column": 0
+      },
+      "end": {
+        "line": 19,
+        "column": 8
+      }
+    },
+    "uid-2": {
+      "start": {
+        "line": 1,
+        "column": 2
+      },
+      "end": {
+        "line": 18,
+        "column": 8
+      }
+    },
+    "uid-3": {
+      "start": {
+        "line": 2,
+        "column": 4
+      },
+      "end": {
+        "line": 2,
+        "column": 94
+      }
+    },
+    "uid-4": {
+      "start": {
+        "line": 3,
+        "column": 4
+      },
+      "end": {
+        "line": 3,
+        "column": 75
+      }
+    },
+    "uid-5": {
+      "start": {
+        "line": 4,
+        "column": 4
+      },
+      "end": {
+        "line": 9,
+        "column": 10
+      }
+    },
+    "uid-6": {
+      "start": {
+        "line": 5,
+        "column": 6
+      },
+      "end": {
+        "line": 5,
+        "column": 184
+      }
+    },
+    "uid-7": {
+      "start": {
+        "line": 6,
+        "column": 6
+      },
+      "end": {
+        "line": 6,
+        "column": 189
+      }
+    },
+    "uid-8": {
+      "start": {
+        "line": 7,
+        "column": 6
+      },
+      "end": {
+        "line": 7,
+        "column": 178
+      }
+    },
+    "uid-9": {
+      "start": {
+        "line": 8,
+        "column": 6
+      },
+      "end": {
+        "line": 8,
+        "column": 190
+      }
+    },
+    "uid-10": {
+      "start": {
+        "line": 10,
+        "column": 4
+      },
+      "end": {
+        "line": 13,
+        "column": 10
+      }
+    },
+    "uid-11": {
+      "start": {
+        "line": 11,
+        "column": 6
+      },
+      "end": {
+        "line": 11,
+        "column": 150
+      }
+    },
+    "uid-12": {
+      "start": {
+        "line": 12,
+        "column": 6
+      },
+      "end": {
+        "line": 12,
+        "column": 153
+      }
+    },
+    "uid-13": {
+      "start": {
+        "line": 14,
+        "column": 4
+      },
+      "end": {
+        "line": 17,
+        "column": 10
+      }
+    },
+    "uid-14": {
+      "start": {
+        "line": 15,
+        "column": 6
+      },
+      "end": {
+        "line": 15,
+        "column": 144
+      }
+    },
+    "uid-15": {
+      "start": {
+        "line": 16,
+        "column": 6
+      },
+      "end": {
+        "line": 16,
+        "column": 158
+      }
+    }
+  }
+}

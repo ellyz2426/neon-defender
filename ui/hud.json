@@ -1,0 +1,339 @@
+{
+  "element": {
+    "sourceTag": "panel",
+    "type": "custom",
+    "children": [
+      {
+        "type": "container",
+        "sourceTag": "div",
+        "children": [
+          {
+            "type": "container",
+            "sourceTag": "div",
+            "children": [
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [
+                  "SCORE: 0"
+                ],
+                "properties": {
+                  "name": "score",
+                  "fontSize": "14",
+                  "color": "#00ffff",
+                  "fontWeight": "bold"
+                },
+                "dataUid": "uid-4"
+              },
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [
+                  "WAVE: 1"
+                ],
+                "properties": {
+                  "name": "wave",
+                  "fontSize": "14",
+                  "color": "#ffcc33"
+                },
+                "dataUid": "uid-5"
+              },
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [
+                  "HUMANS: 10"
+                ],
+                "properties": {
+                  "name": "humans",
+                  "fontSize": "14",
+                  "color": "#33ff66"
+                },
+                "dataUid": "uid-6"
+              },
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [
+                  "LIVES: 3"
+                ],
+                "properties": {
+                  "name": "lives",
+                  "fontSize": "14",
+                  "color": "#ff6666"
+                },
+                "dataUid": "uid-7"
+              },
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [
+                  "BOMBS: 3"
+                ],
+                "properties": {
+                  "name": "bombs",
+                  "fontSize": "14",
+                  "color": "#ff8800"
+                },
+                "dataUid": "uid-8"
+              },
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [
+                  "HS: READY"
+                ],
+                "properties": {
+                  "name": "hyperspace",
+                  "fontSize": "12",
+                  "color": "#aa66ff"
+                },
+                "dataUid": "uid-9"
+              },
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [],
+                "properties": {
+                  "name": "combo",
+                  "fontSize": "14",
+                  "color": "#ffffff"
+                },
+                "dataUid": "uid-10"
+              },
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [],
+                "properties": {
+                  "name": "timer",
+                  "fontSize": "14",
+                  "color": "#ffcc33"
+                },
+                "dataUid": "uid-11"
+              }
+            ],
+            "properties": {
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "padding": "6",
+              "gap": "8",
+              "width": "100%"
+            },
+            "dataUid": "uid-3"
+          },
+          {
+            "type": "container",
+            "sourceTag": "div",
+            "children": [
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [],
+                "properties": {
+                  "name": "powerup",
+                  "fontSize": "13",
+                  "color": "#44ff44",
+                  "fontWeight": "bold"
+                },
+                "dataUid": "uid-13"
+              },
+              {
+                "type": "container",
+                "sourceTag": "div",
+                "children": [],
+                "properties": {
+                  "name": "boss-hp",
+                  "fontSize": "13",
+                  "color": "#ff0044",
+                  "fontWeight": "bold"
+                },
+                "dataUid": "uid-14"
+              }
+            ],
+            "properties": {
+              "flexDirection": "row",
+              "justifyContent": "center",
+              "gap": "12"
+            },
+            "dataUid": "uid-12"
+          },
+          {
+            "type": "container",
+            "sourceTag": "div",
+            "children": [],
+            "properties": {
+              "name": "wave-announce",
+              "fontSize": "22",
+              "color": "#ffcc33",
+              "fontWeight": "bold"
+            },
+            "dataUid": "uid-15"
+          }
+        ],
+        "properties": {
+          "name": "root",
+          "flexDirection": "column",
+          "alignItems": "center",
+          "gap": "2"
+        },
+        "dataUid": "uid-2"
+      }
+    ],
+    "properties": {},
+    "dataUid": "uid-1"
+  },
+  "classes": {},
+  "ranges": {
+    "uid-1": {
+      "start": {
+        "line": 0,
+        "column": 0
+      },
+      "end": {
+        "line": 18,
+        "column": 8
+      }
+    },
+    "uid-2": {
+      "start": {
+        "line": 1,
+        "column": 2
+      },
+      "end": {
+        "line": 17,
+        "column": 8
+      }
+    },
+    "uid-3": {
+      "start": {
+        "line": 2,
+        "column": 4
+      },
+      "end": {
+        "line": 11,
+        "column": 10
+      }
+    },
+    "uid-4": {
+      "start": {
+        "line": 3,
+        "column": 6
+      },
+      "end": {
+        "line": 3,
+        "column": 88
+      }
+    },
+    "uid-5": {
+      "start": {
+        "line": 4,
+        "column": 6
+      },
+      "end": {
+        "line": 4,
+        "column": 67
+      }
+    },
+    "uid-6": {
+      "start": {
+        "line": 5,
+        "column": 6
+      },
+      "end": {
+        "line": 5,
+        "column": 72
+      }
+    },
+    "uid-7": {
+      "start": {
+        "line": 6,
+        "column": 6
+      },
+      "end": {
+        "line": 6,
+        "column": 69
+      }
+    },
+    "uid-8": {
+      "start": {
+        "line": 7,
+        "column": 6
+      },
+      "end": {
+        "line": 7,
+        "column": 69
+      }
+    },
+    "uid-9": {
+      "start": {
+        "line": 8,
+        "column": 6
+      },
+      "end": {
+        "line": 8,
+        "column": 75
+      }
+    },
+    "uid-10": {
+      "start": {
+        "line": 9,
+        "column": 6
+      },
+      "end": {
+        "line": 9,
+        "column": 61
+      }
+    },
+    "uid-11": {
+      "start": {
+        "line": 10,
+        "column": 6
+      },
+      "end": {
+        "line": 10,
+        "column": 61
+      }
+    },
+    "uid-12": {
+      "start": {
+        "line": 12,
+        "column": 4
+      },
+      "end": {
+        "line": 15,
+        "column": 10
+      }
+    },
+    "uid-13": {
+      "start": {
+        "line": 13,
+        "column": 6
+      },
+      "end": {
+        "line": 13,
+        "column": 82
+      }
+    },
+    "uid-14": {
+      "start": {
+        "line": 14,
+        "column": 6
+      },
+      "end": {
+        "line": 14,
+        "column": 82
+      }
+    },
+    "uid-15": {
+      "start": {
+        "line": 16,
+        "column": 4
+      },
+      "end": {
+        "line": 16,
+        "column": 86
+      }
+    }
+  }
+}

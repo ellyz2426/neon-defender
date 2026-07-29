@@ -36,6 +36,14 @@ export class EffectsSystem extends createSystem({}) {
         spawnBurst(0, S.py, cs.accent, 15);
       }
       else if (ev === 'extraLife') spawnBurst(0, S.py, '#ffff00', 18);
+      else if (ev === 'powerup') spawnBurst(0, S.py, '#44ff44', 15);
+      else if (ev === 'bossSpawn') {
+        for (let i = 0; i < 5; i++) spawnBurst((i - 2) * 10, 20, '#ff0044', 8);
+      }
+      else if (ev === 'shieldBreak') {
+        spawnBurst(0, S.py, '#4488ff', 20);
+        spawnBurst(0, S.py, '#88bbff', 10);
+      }
       else if (ev === 'waveComplete') {
         for (let i = 0; i < 3; i++) spawnBurst((i - 1) * 15, 20, cs.accent, 10);
       }

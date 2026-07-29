@@ -28,7 +28,8 @@ export class InputSystem extends createSystem({}) {
 
     // Keyboard input during gameplay
     if (S.phase === 'playing') {
-      const spd = PLAYER_SPEED;
+      const spdMul = S.activePowerUp === 'speedboost' ? 1.6 : 1.0;
+      const spd = PLAYER_SPEED * spdMul;
       if (keys['arrowleft'] || keys['a']) { S.pvx -= spd * d * 2; S.facing = -1; }
       if (keys['arrowright'] || keys['d']) { S.pvx += spd * d * 2; S.facing = 1; }
       if (keys['arrowup'] || keys['w']) { S.pvy += spd * d * 2; }
@@ -47,14 +48,15 @@ export class InputSystem extends createSystem({}) {
       if (inp.getAxesValues) {
         const axes = inp.getAxesValues('Thumbstick');
         if (axes && S.phase === 'playing') {
+          const spdMulVR = S.activePowerUp === 'speedboost' ? 1.6 : 1.0;
           const ax = typeof axes.x === 'number' ? axes.x : 0;
           const ay = typeof axes.y === 'number' ? axes.y : 0;
           if (Math.abs(ax) > 0.15) {
-            S.pvx += ax * PLAYER_SPEED * d * 2;
+            S.pvx += ax * PLAYER_SPEED * spdMulVR * d * 2;
             S.facing = ax > 0 ? 1 : -1;
           }
           if (Math.abs(ay) > 0.15) {
-            S.pvy += ay * PLAYER_SPEED * d * 2;
+            S.pvy += ay * PLAYER_SPEED * spdMulVR * d * 2;
           }
         }
       }

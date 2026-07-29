@@ -1,6 +1,6 @@
 // Neon Defender VR — Core Game System
 import { createSystem, World, Scene, Mesh, Group, MeshBasicMaterial, ConeGeometry } from '@iwsdk/core';
-import { S, WORLD_W, HALF_W, CEIL_Y, VIS_RANGE, BULLET_SPEED, SHOOT_CD, makeShip, makeEnemy, makeHuman, makeBullet, makeMine, Enemy, Humanoid, Bullet, Mine, Mode } from './game-state.js';
+import { S, WORLD_W, HALF_W, CEIL_Y, VIS_RANGE, BULLET_SPEED, SHOOT_CD, POWERUP_DURATION, makeShip, makeEnemy, makeHuman, makeBullet, makeMine, makePowerUp, makeBoss, Enemy, Humanoid, Bullet, Mine, PowerUp, PowerUpType, Mode } from './game-state.js';
 
 let scene: Scene;
 let shipMesh: Group;
@@ -67,6 +67,18 @@ export class GameSystem extends createSystem({}) {
 
     // Mines
     updateMines(d);
+
+    // Power-ups
+    updatePowerUps(d);
+
+    // Active power-up timer
+    if (S.activePowerUp) {
+      S.powerUpTimer -= d;
+      if (S.powerUpTimer <= 0) {
+        S.activePowerUp = null;
+        S.powerUpTimer = 0;
+      }
+    }
 
     // Collisions
     checkCollisions();
@@ -181,6 +193,8 @@ function updateEnemies(d: number) {
       updateBomber(e, d, dm);
     } else if (e.type === 'swarmer') {
       updateSwarmer(e, d, dm);
+    } else if (e.type === 'boss' as string) {
+      updateBoss(e, d, dm);
     }
 
     e.x = S.wrap(e.x);
@@ -281,6 +295,34 @@ function updateSwarmer(e: Enemy, d: number, dm: number) {
   e.y += e.vy * d;
 }
 
+function updateBoss(e: Enemy, d: number, dm: number) {
+  // Slow, menacing movement — tracks player horizontally, bobs vertically
+  const dx = S.rel(e.x);
+  const targetVX = -Math.sign(dx) * 10 * dm;
+  e.vx += (targetVX - e.vx) * 0.8 * d;
+  e.vy = Math.sin(e.timer * 1.2) * 5;
+  e.x += e.vx * d;
+  e.y += e.vy * d;
+  e.y = Math.max(CEIL_Y * 0.3, Math.min(CEIL_Y * 0.85, e.y));
+
+  // Boss mesh pulses size
+  const pulse = 1.0 + Math.sin(e.timer * 4) * 0.05;
+  e.mesh.scale.setScalar(pulse);
+
+  // Track boss HP for HUD
+  S.bossHP = e.hp;
+
+  // Boss periodically fires projectiles (mines toward player)
+  if (e.timer > 2 && Math.abs(dx) < VIS_RANGE && Math.random() < 0.8 * d * dm) {
+    if (S.mines.length < 25) {
+      const m: Mine = { x: e.x, y: e.y - 1, mesh: makeMine(), timer: 6 };
+      scene.add(m.mesh);
+      S.mines.push(m);
+    }
+    e.timer = 0;
+  }
+}
+
 function updateHumanoids(d: number) {
   for (const h of S.humanoids) {
     if (h.state === 'walking') {
@@ -323,6 +365,44 @@ function updateMines(d: number) {
       scene.remove(m.mesh);
       S.mines.splice(i, 1);
     }
+  }
+}
+
+function updatePowerUps(d: number) {
+  for (let i = S.powerUps.length - 1; i >= 0; i--) {
+    const p = S.powerUps[i];
+    p.timer -= d;
+    // Rotate and bob
+    p.mesh.rotation.y += 2 * d;
+    p.mesh.position.y = p.y + Math.sin(p.timer * 3) * 0.3;
+    if (p.timer <= 0) {
+      scene.remove(p.mesh);
+      S.powerUps.splice(i, 1);
+      continue;
+    }
+    // Check player pickup
+    let dx = S.px - p.x;
+    if (dx > HALF_W) dx -= WORLD_W;
+    if (dx < -HALF_W) dx += WORLD_W;
+    const dy = S.py - p.y;
+    if (Math.abs(dx) < 2.5 && Math.abs(dy) < 2.5) {
+      S.activePowerUp = p.type;
+      S.powerUpTimer = POWERUP_DURATION;
+      S.powerUpsCollected.add(p.type);
+      S.totalPowerUps++;
+      S.unlock('first_powerup');
+      if (S.powerUpsCollected.size >= 4) S.unlock('all_powerups');
+      scene.remove(p.mesh);
+      S.powerUps.splice(i, 1);
+      S.uiEvent = 'powerup';
+      S.uiData = p.type;
+    }
+  }
+  // Update visibility
+  for (const p of S.powerUps) {
+    const rx = S.rel(p.x);
+    p.mesh.visible = Math.abs(rx) < VIS_RANGE;
+    if (p.mesh.visible) p.mesh.position.x = rx;
   }
 }
 
@@ -382,13 +462,22 @@ function checkCollisions() {
 
 function killEnemy(e: Enemy, idx: number) {
   // Score
-  const pts: Record<string, number> = { lander: 150, mutant: 300, bomber: 200, swarmer: 100 };
+  const pts: Record<string, number> = { lander: 150, mutant: 300, bomber: 200, swarmer: 100, boss: 1000 };
   S.score += (pts[e.type] || 100) * S.combo;
   S.combo++;
   S.comboTimer = 3;
   S.totalKills++;
 
   if (e.type === 'mutant') S.unlock('mutant_kill');
+  if (e.type === 'boss' as string) {
+    S.bossActive = false;
+    S.bossHP = 0;
+    S.bossesKilledGame++;
+    S.totalBossKills++;
+    S.unlock('boss_kill');
+    if (S.bossesKilledGame >= 3) S.unlock('boss3');
+    S.saveStats();
+  }
   if (S.combo >= 5) S.unlock('combo5');
   if (S.combo >= 10) S.unlock('combo10');
 
@@ -405,15 +494,38 @@ function killEnemy(e: Enemy, idx: number) {
   e.state = 'dead';
   S.uiEvent = 'kill';
   S.uiData = e.type;
+
+  // Chance to drop power-up (15% base, higher for bosses)
+  const dropChance = e.type === 'boss' as string ? 1.0 : 0.15;
+  if (Math.random() < dropChance && S.powerUps.length < 5) {
+    const types: PowerUpType[] = ['rapidfire', 'speedboost', 'shield', 'tripleshot'];
+    const pType = types[Math.floor(Math.random() * types.length)];
+    const pu: PowerUp = { x: e.x, y: e.y, type: pType, mesh: makePowerUp(pType), timer: 10 };
+    pu.mesh.position.set(S.rel(e.x), e.y, 0);
+    scene.add(pu.mesh);
+    S.powerUps.push(pu);
+  }
 }
 
 function playerDeath() {
+  // Shield absorbs the hit
+  if (S.activePowerUp === 'shield') {
+    S.activePowerUp = null;
+    S.powerUpTimer = 0;
+    S.invTimer = 1.5;
+    S.unlock('shield_save');
+    S.uiEvent = 'shieldBreak';
+    return;
+  }
+
   S.lives--;
   S.totalDeaths++;
   S.diedThisWave = true;
   S.invTimer = 2.5;
   S.pvx = 0; S.pvy = 0;
   S.combo = 1;
+  S.activePowerUp = null;
+  S.powerUpTimer = 0;
   S.uiEvent = 'death';
 
   if (S.lives <= 0) {
@@ -497,6 +609,11 @@ export function spawnWave(sc: Scene) {
   for (let i = 0; i < numBombers; i++) spawnEnemy('bomber', sc, dm);
   for (let i = 0; i < numSwarmers; i++) spawnEnemy('swarmer', sc, dm);
 
+  // Boss wave every 5th wave
+  if (w > 0 && w % 5 === 0) {
+    spawnBoss(sc, w, dm);
+  }
+
   S.waveEnemiesLeft = 0;
 
   // Check wave achievements
@@ -519,6 +636,24 @@ function spawnEnemy(type: string, sc: Scene, dm: number) {
   S.enemies.push(e);
 }
 
+function spawnBoss(sc: Scene, wave: number, dm: number) {
+  const bossHP = 10 + Math.floor(wave / 5) * 5;
+  const x = S.px + (Math.random() > 0.5 ? 1 : -1) * (VIS_RANGE + 20);
+  const e: Enemy = {
+    type: 'boss' as Enemy['type'],
+    x: S.wrap(x), y: CEIL_Y * 0.6,
+    vx: (Math.random() - 0.5) * 6 * dm, vy: 0,
+    state: 'alive', target: -1, hp: bossHP,
+    mesh: makeBoss(), timer: 0,
+  };
+  sc.add(e.mesh);
+  S.enemies.push(e);
+  S.bossActive = true;
+  S.bossHP = bossHP;
+  S.bossMaxHP = bossHP;
+  S.uiEvent = 'bossSpawn';
+}
+
 function buildTerrain() {
   const mat = new MeshBasicMaterial({ color: '#003344', transparent: true, opacity: 0.4 });
   for (let i = -200; i < 200; i += 8) {
@@ -533,14 +668,35 @@ function buildTerrain() {
 
 // Public API for input system
 export function shoot() {
-  if (S.shootCD > 0 || S.phase !== 'playing') return;
-  S.shootCD = SHOOT_CD;
+  if (S.phase !== 'playing') return;
+  const cd = S.activePowerUp === 'rapidfire' ? SHOOT_CD * 0.35 : SHOOT_CD;
+  if (S.shootCD > 0) return;
+  S.shootCD = cd;
+
+  const spd = BULLET_SPEED;
   const b: Bullet = {
     x: S.px + S.facing * 1.5, y: S.py,
-    vx: BULLET_SPEED * S.facing, mesh: makeBullet(),
+    vx: spd * S.facing, mesh: makeBullet(),
   };
   scene.add(b.mesh);
   S.bullets.push(b);
+
+  // Triple shot fires two additional angled bullets
+  if (S.activePowerUp === 'tripleshot') {
+    const b2: Bullet = {
+      x: S.px + S.facing * 1.5, y: S.py + 0.4,
+      vx: spd * S.facing * 0.95, mesh: makeBullet(),
+    };
+    scene.add(b2.mesh);
+    S.bullets.push(b2);
+    const b3: Bullet = {
+      x: S.px + S.facing * 1.5, y: S.py - 0.4,
+      vx: spd * S.facing * 0.95, mesh: makeBullet(),
+    };
+    scene.add(b3.mesh);
+    S.bullets.push(b3);
+  }
+
   S.uiEvent = 'shoot';
 }
 
@@ -592,7 +748,10 @@ export function returnToMenu() {
   for (const b of S.bullets) scene.remove(b.mesh);
   for (const m of S.mines) scene.remove(m.mesh);
   for (const h of S.humanoids) scene.remove(h.mesh);
-  S.enemies = []; S.bullets = []; S.mines = []; S.humanoids = [];
+  for (const p of S.powerUps) scene.remove(p.mesh);
+  S.enemies = []; S.bullets = []; S.mines = []; S.humanoids = []; S.powerUps = [];
+  S.activePowerUp = null; S.powerUpTimer = 0;
+  S.bossActive = false; S.bossHP = 0; S.bossMaxHP = 0;
   shipMesh.visible = false;
   S.phase = 'menu';
   S.uiEvent = 'menu';

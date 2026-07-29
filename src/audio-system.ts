@@ -101,6 +101,22 @@ export class AudioSystem extends createSystem({}) {
       playTone(784, 0.1, 0.1, 'sine');
       playTone(1047, 0.2, 0.12, 'sine');
     }
+    else if (ev === 'powerup') {
+      playTone(440, 0.08, 0.1, 'sine');
+      playTone(660, 0.08, 0.1, 'sine');
+      playTone(880, 0.1, 0.12, 'triangle');
+      playTone(1100, 0.15, 0.1, 'sine');
+    }
+    else if (ev === 'bossSpawn') {
+      playTone(80, 0.5, 0.18, 'sawtooth');
+      playTone(60, 0.7, 0.15, 'sine');
+      playNoise(0.3, 0.12);
+    }
+    else if (ev === 'shieldBreak') {
+      playTone(300, 0.15, 0.12, 'square');
+      playTone(500, 0.1, 0.1, 'sine');
+      playNoise(0.2, 0.1);
+    }
     else if (ev === 'grabbed') { playTone(300, 0.2, 0.1, 'sawtooth'); }
     else if (ev === 'mutated') {
       playTone(150, 0.3, 0.12, 'sawtooth');

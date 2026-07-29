@@ -10,6 +10,10 @@
       <div name="combo" font-size="14" color="#ffffff"></div>
       <div name="timer" font-size="14" color="#ffcc33"></div>
     </div>
+    <div flex-direction="row" justify-content="center" gap="12">
+      <div name="powerup" font-size="13" color="#44ff44" font-weight="bold"></div>
+      <div name="boss-hp" font-size="13" color="#ff0044" font-weight="bold"></div>
+    </div>
     <div name="wave-announce" font-size="22" color="#ffcc33" font-weight="bold"></div>
   </div>
 </panel>

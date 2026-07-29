@@ -16,6 +16,16 @@ export type Diff = 'normal' | 'hard' | 'insane';
 
 export interface Bullet { x: number; y: number; vx: number; mesh: Mesh; }
 export interface Mine { x: number; y: number; mesh: Mesh; timer: number; }
+
+export type PowerUpType = 'rapidfire' | 'speedboost' | 'shield' | 'tripleshot';
+export const POWERUP_NAMES: Record<PowerUpType, string> = {
+  rapidfire: 'RAPID FIRE', speedboost: 'SPEED BOOST', shield: 'SHIELD', tripleshot: 'TRIPLE SHOT',
+};
+export const POWERUP_COLORS: Record<PowerUpType, string> = {
+  rapidfire: '#ff4444', speedboost: '#44ff44', shield: '#4488ff', tripleshot: '#ffaa00',
+};
+export const POWERUP_DURATION = 8;
+export interface PowerUp { x: number; y: number; type: PowerUpType; mesh: Group; timer: number; }
 export interface Humanoid {
   x: number; state: 'walking' | 'grabbed' | 'falling' | 'rescued' | 'dead';
   dir: number; mesh: Group; grabbedBy: number;
@@ -64,6 +74,11 @@ export const ACH_DEFS: Omit<Achievement, 'unlocked'>[] = [
   { id: 'rescue10', name: 'Guardian Angel', desc: '10 rescues in one game' },
   { id: 'combo20', name: 'Unstoppable', desc: 'Reach 20x combo' },
   { id: 'speed_clear', name: 'Speed Demon', desc: 'Reach wave 5 in speed mode' },
+  { id: 'first_powerup', name: 'Powered Up', desc: 'Collect your first power-up' },
+  { id: 'all_powerups', name: 'Arsenal', desc: 'Collect all 4 power-up types' },
+  { id: 'boss_kill', name: 'Boss Slayer', desc: 'Defeat a boss' },
+  { id: 'boss3', name: 'Boss Hunter', desc: 'Defeat 3 bosses in one game' },
+  { id: 'shield_save', name: 'Close Call', desc: 'Survive a hit with shield active' },
 ];
 
 class GameState {
@@ -84,6 +99,20 @@ class GameState {
   mines: Mine[] = [];
   enemies: Enemy[] = [];
   humanoids: Humanoid[] = [];
+  powerUps: PowerUp[] = [];
+
+  // Active power-up
+  activePowerUp: PowerUpType | null = null;
+  powerUpTimer = 0;
+  powerUpsCollected: Set<PowerUpType> = new Set();
+  totalPowerUps = 0;
+
+  // Boss tracking
+  bossActive = false;
+  bossHP = 0;
+  bossMaxHP = 0;
+  bossesKilledGame = 0;
+  totalBossKills = 0;
 
   speedTimer = 120;
   hyperspaceCooldown = 0;
@@ -120,6 +149,15 @@ class GameState {
     this.nextExtraLife = 10000;
     this.waveAnnounceTimer = 0;
     this.bullets = []; this.mines = []; this.enemies = []; this.humanoids = [];
+    this.powerUps = [];
+    this.activePowerUp = null;
+    this.powerUpTimer = 0;
+    this.powerUpsCollected = new Set();
+    this.totalPowerUps = 0;
+    this.bossActive = false;
+    this.bossHP = 0;
+    this.bossMaxHP = 0;
+    this.bossesKilledGame = 0;
   }
 
   dm(): number { return this.diff === 'insane' ? 1.6 : this.diff === 'hard' ? 1.3 : 1.0; }
@@ -147,6 +185,7 @@ class GameState {
       this.totalBombs = d.tb || 0; this.totalDeaths = d.td || 0;
       this.highScore = d.hs || 0; this.bestWave = d.bw || 0;
       this.modesPlayed = new Set(d.mp || []);
+      this.totalBossKills = d.tbk || 0;
     } catch { /* */ }
   }
 
@@ -156,6 +195,7 @@ class GameState {
         tg: this.totalGames, tk: this.totalKills, tr: this.totalRescues,
         tw: this.totalWaves, tb: this.totalBombs, td: this.totalDeaths,
         hs: this.highScore, bw: this.bestWave, mp: [...this.modesPlayed],
+        tbk: this.totalBossKills,
       }));
     } catch { /* */ }
   }
@@ -239,4 +279,43 @@ export function makeBullet(): Mesh {
 
 export function makeMine(): Mesh {
   return new Mesh(new SphereGeometry(0.2, 4, 3), C('#ff8800'));
+}
+
+export function makePowerUp(type: PowerUpType): Group {
+  const g = new Group();
+  const color = POWERUP_COLORS[type];
+  const core = new Mesh(new SphereGeometry(0.35, 6, 4), C(color));
+  g.add(core);
+  const ring = new LineSegments(
+    new EdgesGeometry(new CylinderGeometry(0.5, 0.5, 0.1, 8)),
+    W(color)
+  );
+  g.add(ring);
+  return g;
+}
+
+export function makeBoss(): Group {
+  const g = new Group();
+  // Large angular body
+  const body = new Mesh(new BoxGeometry(2.5, 1.8, 1.2), C('#ff0044'));
+  g.add(body);
+  const edges = new LineSegments(new EdgesGeometry(new BoxGeometry(2.6, 1.9, 1.3)), W('#ff6688'));
+  g.add(edges);
+  // Eye
+  const eye = new Mesh(new SphereGeometry(0.4, 6, 4), C('#ffffff'));
+  eye.position.set(0.6, 0.3, 0.6);
+  g.add(eye);
+  const pupil = new Mesh(new SphereGeometry(0.2, 4, 3), C('#ff0000'));
+  pupil.position.set(0.6, 0.3, 0.85);
+  g.add(pupil);
+  // Wings
+  const wing1 = new Mesh(new BoxGeometry(0.8, 2.2, 0.15), C('#cc0033'));
+  wing1.position.set(-1.2, 0.4, 0);
+  wing1.rotation.z = 0.3;
+  g.add(wing1);
+  const wing2 = wing1.clone();
+  wing2.position.set(1.2, 0.4, 0);
+  wing2.rotation.z = -0.3;
+  g.add(wing2);
+  return g;
 }

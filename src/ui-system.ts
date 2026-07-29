@@ -1,6 +1,6 @@
 // Neon Defender VR — UI System
 import { createSystem, PanelUI, PanelDocument, UIKitDocument, UIKit, eq, Entity, World } from '@iwsdk/core';
-import { S, SCHEMES, WORLD_W, HALF_W } from './game-state.js';
+import { S, SCHEMES, WORLD_W, HALF_W, POWERUP_NAMES } from './game-state.js';
 import { startGame, togglePause, returnToMenu } from './game-system.js';
 import type { Mode, Diff } from './game-state.js';
 
@@ -136,6 +136,23 @@ export class UISystem extends createSystem({
       setText(hudDoc, 'humans', `HUMANS: ${alive}`);
       setText(hudDoc, 'hyperspace', S.hyperspaceCooldown > 0 ? `HS: ${Math.ceil(S.hyperspaceCooldown)}s` : 'HS: READY');
       setText(hudDoc, 'wave-announce', S.waveAnnounceTimer > 0 ? `── WAVE ${S.wave} ──` : '');
+      // Power-up display
+      if (S.activePowerUp) {
+        const name = POWERUP_NAMES[S.activePowerUp];
+        setText(hudDoc, 'powerup', `${name} ${Math.ceil(S.powerUpTimer)}s`);
+      } else {
+        setText(hudDoc, 'powerup', '');
+      }
+      // Boss HP display
+      if (S.bossActive && S.bossMaxHP > 0) {
+        const pct = Math.ceil((S.bossHP / S.bossMaxHP) * 100);
+        const barLen = 10;
+        const filled = Math.ceil((S.bossHP / S.bossMaxHP) * barLen);
+        const bar = '█'.repeat(filled) + '░'.repeat(barLen - filled);
+        setText(hudDoc, 'boss-hp', `BOSS [${bar}] ${pct}%`);
+      } else {
+        setText(hudDoc, 'boss-hp', '');
+      }
     }
 
     if (scannerDoc && (p === 'playing' || p === 'waveComplete')) {
@@ -160,6 +177,7 @@ export class UISystem extends createSystem({
       setText(statsDoc, 'stat-deaths', `Deaths: ${S.totalDeaths}`);
       setText(statsDoc, 'stat-highscore', `High Score: ${S.highScore}`);
       setText(statsDoc, 'stat-bestwave', `Best Wave: ${S.bestWave}`);
+      setText(statsDoc, 'stat-bosskills', `Boss Kills: ${S.totalBossKills}`);
     }
 
     if (settingsDoc && ev === 'showSettings') {

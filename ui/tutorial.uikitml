@@ -1,0 +1,21 @@
+<panel>
+  <div name="root" background-color="#000a14" border-radius="12" padding="16" flex-direction="column" gap="6">
+    <div font-size="20" color="#00ffff" font-weight="bold" align-self="center">HOW TO PLAY</div>
+    <div font-size="11" color="#aabbcc">Defend humanoids from alien abduction!</div>
+    <div font-size="11" color="#88aacc">Landers grab humans from the ground.</div>
+    <div font-size="11" color="#88aacc">If a lander escapes - it becomes a Mutant!</div>
+    <div font-size="11" color="#88aacc">Shoot landers to free grabbed humans.</div>
+    <div font-size="11" color="#88aacc">Catch falling humans for bonus points.</div>
+    <div font-size="13" color="#ffcc33" padding-top="4">Controls:</div>
+    <div font-size="11" color="#88aacc">Arrows/WASD - Move ship</div>
+    <div font-size="11" color="#88aacc">Space/F - Shoot</div>
+    <div font-size="11" color="#88aacc">Shift/E - Smart Bomb</div>
+    <div font-size="11" color="#88aacc">Esc/P - Pause</div>
+    <div font-size="13" color="#ffcc33" padding-top="4">VR Controls:</div>
+    <div font-size="11" color="#88aacc">Thumbstick - Move</div>
+    <div font-size="11" color="#88aacc">Trigger/A - Shoot</div>
+    <div font-size="11" color="#88aacc">Grip - Smart Bomb</div>
+    <div font-size="11" color="#88aacc">B - Pause</div>
+    <div name="btn-tutorial-back" background-color="#222233" border-radius="4" padding="8" cursor="pointer" font-size="12" color="#8899aa" align-self="center" margin-top="6">BACK</div>
+  </div>
+</panel>

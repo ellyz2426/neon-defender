@@ -1,0 +1,14 @@
+<panel>
+  <div name="root" background-color="#000a14" border-radius="12" padding="16" flex-direction="column" align-items="center" gap="8">
+    <div font-size="24" color="#ff3366" font-weight="bold">GAME OVER</div>
+    <div name="high-score" font-size="14" color="#ffcc33"></div>
+    <div name="final-score" font-size="16" color="#00ffff">Score: 0</div>
+    <div name="final-wave" font-size="14" color="#ffffff">Wave: 1</div>
+    <div name="final-kills" font-size="14" color="#ff6666">Kills: 0</div>
+    <div name="final-rescues" font-size="14" color="#33ff66">Rescues: 0</div>
+    <div flex-direction="row" gap="10" padding-top="10">
+      <div name="btn-retry" background-color="#004466" border-radius="6" padding="10" cursor="pointer" font-size="14" color="#00ffff">RETRY</div>
+      <div name="btn-menu" background-color="#222233" border-radius="6" padding="10" cursor="pointer" font-size="14" color="#8899aa">MENU</div>
+    </div>
+  </div>
+</panel>

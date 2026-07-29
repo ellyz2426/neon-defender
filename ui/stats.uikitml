@@ -1,0 +1,14 @@
+<panel>
+  <div name="root" background-color="#000a14" border-radius="12" padding="16" flex-direction="column" align-items="center" gap="6">
+    <div font-size="20" color="#00ffff" font-weight="bold">CAREER STATS</div>
+    <div name="stat-games" font-size="13" color="#aabbcc">Games: 0</div>
+    <div name="stat-kills" font-size="13" color="#ff6666">Kills: 0</div>
+    <div name="stat-rescues" font-size="13" color="#33ff66">Rescues: 0</div>
+    <div name="stat-waves" font-size="13" color="#ffcc33">Waves: 0</div>
+    <div name="stat-bombs" font-size="13" color="#ff8800">Bombs: 0</div>
+    <div name="stat-deaths" font-size="13" color="#8899aa">Deaths: 0</div>
+    <div name="stat-highscore" font-size="14" color="#00ffff" padding-top="4">High Score: 0</div>
+    <div name="stat-bestwave" font-size="14" color="#ffcc33">Best Wave: 0</div>
+    <div name="btn-stats-back" background-color="#222233" border-radius="4" padding="8" cursor="pointer" font-size="12" color="#8899aa" margin-top="6">BACK</div>
+  </div>
+</panel>

@@ -1,0 +1,7 @@
+<panel>
+  <div name="root" background-color="#000a14" border-radius="12" padding="20" flex-direction="column" align-items="center" gap="10">
+    <div font-size="24" color="#ffcc33" font-weight="bold">PAUSED</div>
+    <div name="btn-resume" background-color="#004466" border-radius="6" padding="10" cursor="pointer" font-size="16" color="#00ffff">RESUME</div>
+    <div name="btn-quit" background-color="#440022" border-radius="6" padding="10" cursor="pointer" font-size="16" color="#ff6666">QUIT TO MENU</div>
+  </div>
+</panel>

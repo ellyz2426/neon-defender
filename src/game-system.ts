@@ -41,7 +41,9 @@ export class GameSystem extends createSystem({}) {
     S.shootCD -= d;
     S.invTimer -= d;
     S.comboTimer -= d;
+    S.hyperspaceCooldown -= d;
     if (S.comboTimer <= 0) S.combo = 1;
+    if (S.waveAnnounceTimer > 0) S.waveAnnounceTimer -= d;
 
     // Apply velocity with drag
     S.px += S.pvx * d;
@@ -72,6 +74,13 @@ export class GameSystem extends createSystem({}) {
     // Check wave complete
     if (S.enemies.length === 0 && S.waveEnemiesLeft <= 0) {
       waveComplete();
+    }
+
+    // Extra life at score thresholds
+    while (S.score >= S.nextExtraLife) {
+      S.lives++;
+      S.nextExtraLife += 10000;
+      S.uiEvent = 'extraLife';
     }
 
     // Achievements
@@ -431,6 +440,7 @@ function endGame() {
 function waveComplete() {
   S.phase = 'waveComplete';
   S.waveTimer = 2.0;
+  S.waveAnnounceTimer = 2.0;
 
   // Bonus: all humanoids alive
   const alive = S.humanoids.filter(h => h.state === 'walking' || h.state === 'rescued').length;
@@ -438,7 +448,13 @@ function waveComplete() {
     S.score += 1000;
     S.unlock('all_humans');
   }
-  if (!S.diedThisWave) S.unlock('no_death');
+  if (!S.diedThisWave) {
+    S.unlock('no_death');
+    S.wavesWithoutDeath++;
+    if (S.wavesWithoutDeath >= 3) S.unlock('survive3');
+  } else {
+    S.wavesWithoutDeath = 0;
+  }
 
   S.uiEvent = 'waveComplete';
 }
@@ -515,11 +531,6 @@ function buildTerrain() {
   }
 }
 
-// Workaround: inline ConeGeometry usage
-function await_ConeGeo() {
-  return ConeGeometry;
-}
-
 // Public API for input system
 export function shoot() {
   if (S.shootCD > 0 || S.phase !== 'playing') return;
@@ -564,6 +575,17 @@ export function togglePause() {
   else if (S.phase === 'paused') { S.phase = 'playing'; S.uiEvent = 'resume'; }
 }
 
+export function hyperspace() {
+  if (S.hyperspaceCooldown > 0 || S.phase !== 'playing') return;
+  S.px = S.wrap((Math.random() - 0.5) * WORLD_W);
+  S.py = 5 + Math.random() * 25;
+  S.pvx = 0; S.pvy = 0;
+  S.hyperspaceCooldown = 3;
+  S.invTimer = Math.max(S.invTimer, 1.5);
+  S.unlock('hyperspace');
+  S.uiEvent = 'hyperspace';
+}
+
 export function returnToMenu() {
   // Clean up
   for (const e of S.enemies) scene.remove(e.mesh);
@@ -582,4 +604,7 @@ function checkAchievements() {
   if (S.score >= 100000) S.unlock('score100k');
   if (S.totalKills >= 100) S.unlock('kill100');
   if (S.totalKills >= 500) S.unlock('kill500');
+  if (S.combo >= 20) S.unlock('combo20');
+  if (S.rescuesGame >= 10) S.unlock('rescue10');
+  if (S.mode === 'speed' && S.wave >= 5) S.unlock('speed_clear');
 }

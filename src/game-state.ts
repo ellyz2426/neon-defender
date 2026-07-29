@@ -59,6 +59,11 @@ export const ACH_DEFS: Omit<Achievement, 'unlocked'>[] = [
   { id: 'kill500', name: 'Destroyer', desc: '500 career kills' },
   { id: 'games10', name: 'Veteran', desc: 'Play 10 games' },
   { id: 'all_modes', name: 'Well Rounded', desc: 'Play all 4 modes' },
+  { id: 'hyperspace', name: 'Hyperspace!', desc: 'Use hyperspace teleport' },
+  { id: 'survive3', name: 'Iron Will', desc: 'Survive 3 waves without dying' },
+  { id: 'rescue10', name: 'Guardian Angel', desc: '10 rescues in one game' },
+  { id: 'combo20', name: 'Unstoppable', desc: 'Reach 20x combo' },
+  { id: 'speed_clear', name: 'Speed Demon', desc: 'Reach wave 5 in speed mode' },
 ];
 
 class GameState {
@@ -81,6 +86,10 @@ class GameState {
   humanoids: Humanoid[] = [];
 
   speedTimer = 120;
+  hyperspaceCooldown = 0;
+  wavesWithoutDeath = 0;
+  nextExtraLife = 10000;
+  waveAnnounceTimer = 0;
 
   // Persisted stats
   totalGames = 0; totalKills = 0; totalRescues = 0;
@@ -106,6 +115,10 @@ class GameState {
     this.score = 0; this.wave = 1; this.combo = 1; this.comboTimer = 0;
     this.waveTimer = 0; this.diedThisWave = false; this.rescuesGame = 0;
     this.speedTimer = 120;
+    this.hyperspaceCooldown = 0;
+    this.wavesWithoutDeath = 0;
+    this.nextExtraLife = 10000;
+    this.waveAnnounceTimer = 0;
     this.bullets = []; this.mines = []; this.enemies = []; this.humanoids = [];
   }
 

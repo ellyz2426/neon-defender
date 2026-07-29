@@ -6,15 +6,18 @@
     <div font-size="11" color="#88aacc">If a lander escapes - it becomes a Mutant!</div>
     <div font-size="11" color="#88aacc">Shoot landers to free grabbed humans.</div>
     <div font-size="11" color="#88aacc">Catch falling humans for bonus points.</div>
+    <div font-size="11" color="#88aacc">Extra life every 10,000 points!</div>
     <div font-size="13" color="#ffcc33" padding-top="4">Controls:</div>
     <div font-size="11" color="#88aacc">Arrows/WASD - Move ship</div>
     <div font-size="11" color="#88aacc">Space/F - Shoot</div>
     <div font-size="11" color="#88aacc">Shift/E - Smart Bomb</div>
+    <div font-size="11" color="#88aacc">H - Hyperspace (emergency teleport)</div>
     <div font-size="11" color="#88aacc">Esc/P - Pause</div>
     <div font-size="13" color="#ffcc33" padding-top="4">VR Controls:</div>
     <div font-size="11" color="#88aacc">Thumbstick - Move</div>
     <div font-size="11" color="#88aacc">Trigger/A - Shoot</div>
     <div font-size="11" color="#88aacc">Grip - Smart Bomb</div>
+    <div font-size="11" color="#88aacc">Y - Hyperspace</div>
     <div font-size="11" color="#88aacc">B - Pause</div>
     <div name="btn-tutorial-back" background-color="#222233" border-radius="4" padding="8" cursor="pointer" font-size="12" color="#8899aa" align-self="center" margin-top="6">BACK</div>
   </div>

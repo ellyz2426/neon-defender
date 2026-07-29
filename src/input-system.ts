@@ -1,7 +1,7 @@
 // Neon Defender VR — Input System
 import { createSystem, World } from '@iwsdk/core';
 import { S, PLAYER_SPEED } from './game-state.js';
-import { shoot, smartBomb, togglePause, startGame, returnToMenu } from './game-system.js';
+import { shoot, smartBomb, togglePause, startGame, returnToMenu, hyperspace } from './game-system.js';
 
 const keys: Record<string, boolean> = {};
 
@@ -35,6 +35,7 @@ export class InputSystem extends createSystem({}) {
       if (keys['arrowdown'] || keys['s']) { S.pvy -= spd * d * 2; }
       if (keys[' '] || keys['f']) shoot();
       if (keys['shift'] || keys['e']) { smartBomb(); keys['shift'] = false; keys['e'] = false; }
+      if (keys['h']) { hyperspace(); keys['h'] = false; }
     }
 
     // VR controller input
@@ -66,6 +67,9 @@ export class InputSystem extends createSystem({}) {
         }
         if (inp.getButtonDown('B')) {
           if (S.phase === 'playing' || S.phase === 'paused') togglePause();
+        }
+        if (inp.getButtonDown('Y')) {
+          if (S.phase === 'playing') hyperspace();
         }
       }
     } catch { /* no XR input */ }

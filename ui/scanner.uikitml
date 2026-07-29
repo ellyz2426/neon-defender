@@ -1,0 +1,6 @@
+<panel>
+  <div name="root" background-color="#000408" border-radius="4" padding="4" flex-direction="column" align-items="center" border-width="1" border-color="#004466">
+    <div name="scanner-label" font-size="8" color="#446688">SCANNER</div>
+    <div name="scanner-display" font-size="7" color="#00ffcc">····························▲····························</div>
+  </div>
+</panel>

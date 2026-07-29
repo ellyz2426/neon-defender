@@ -89,6 +89,18 @@ export class AudioSystem extends createSystem({}) {
       playTone(659, 0.1, 0.1, 'sine');
       playTone(784, 0.15, 0.12, 'sine');
     }
+    else if (ev === 'hyperspace') {
+      playTone(1200, 0.1, 0.1, 'sine');
+      playTone(600, 0.15, 0.12, 'sine');
+      playTone(300, 0.2, 0.1, 'sine');
+      playNoise(0.15, 0.08);
+    }
+    else if (ev === 'extraLife') {
+      playTone(523, 0.1, 0.12, 'sine');
+      playTone(659, 0.1, 0.1, 'sine');
+      playTone(784, 0.1, 0.1, 'sine');
+      playTone(1047, 0.2, 0.12, 'sine');
+    }
     else if (ev === 'grabbed') { playTone(300, 0.2, 0.1, 'sawtooth'); }
     else if (ev === 'mutated') {
       playTone(150, 0.3, 0.12, 'sawtooth');

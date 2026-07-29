@@ -1,12 +1,13 @@
-// Neon Defender VR — Effects System (particles + scanner)
+// Neon Defender VR — Effects System (particles, thrust trail, hyperspace)
 import { createSystem, World, Scene, Mesh, SphereGeometry, BoxGeometry, MeshBasicMaterial } from '@iwsdk/core';
-import { S, VIS_RANGE } from './game-state.js';
+import { S, VIS_RANGE, SCHEMES } from './game-state.js';
 
 interface Particle { mesh: Mesh; vx: number; vy: number; life: number; }
 let scene: Scene;
 const particles: Particle[] = [];
 const ambientOrbs: Mesh[] = [];
 let lastEvent = '';
+let thrustTimer = 0;
 
 export class EffectsSystem extends createSystem({}) {
   init() {
@@ -25,12 +26,38 @@ export class EffectsSystem extends createSystem({}) {
     const ev = S.uiEvent;
     if (ev && ev !== lastEvent) {
       lastEvent = ev;
-      if (ev === 'kill') spawnBurst(0, S.py, '#ff3366', 8);
-      else if (ev === 'death') spawnBurst(0, S.py, '#00ffff', 15);
+      const cs = SCHEMES[S.scheme];
+      if (ev === 'kill') spawnBurst(0, S.py, cs.enemy, 8);
+      else if (ev === 'death') spawnBurst(0, S.py, cs.player, 15);
       else if (ev === 'bomb') spawnBurst(0, S.py, '#ffffff', 25);
-      else if (ev === 'rescue') spawnBurst(0, S.py, '#33ff66', 12);
+      else if (ev === 'rescue') spawnBurst(0, S.py, cs.human, 12);
+      else if (ev === 'hyperspace') {
+        spawnBurst(0, S.py, '#aa66ff', 20);
+        spawnBurst(0, S.py, cs.accent, 15);
+      }
+      else if (ev === 'extraLife') spawnBurst(0, S.py, '#ffff00', 18);
       else if (ev === 'waveComplete') {
-        for (let i = 0; i < 3; i++) spawnBurst((i - 1) * 15, 20, '#ffcc33', 10);
+        for (let i = 0; i < 3; i++) spawnBurst((i - 1) * 15, 20, cs.accent, 10);
+      }
+    }
+
+    // Thrust trail when moving
+    if (S.phase === 'playing') {
+      thrustTimer -= d;
+      const speed = Math.sqrt(S.pvx * S.pvx + S.pvy * S.pvy);
+      if (speed > 5 && thrustTimer <= 0) {
+        thrustTimer = 0.04;
+        const cs = SCHEMES[S.scheme];
+        const mesh = new Mesh(
+          new SphereGeometry(0.08, 3, 2),
+          new MeshBasicMaterial({ color: cs.accent, transparent: true, opacity: 0.7 })
+        );
+        mesh.position.set(-S.facing * 1.2, S.py + (Math.random() - 0.5) * 0.3, 0.3);
+        scene.add(mesh);
+        particles.push({
+          mesh, life: 0.3 + Math.random() * 0.2,
+          vx: -S.facing * (3 + Math.random() * 4), vy: (Math.random() - 0.5) * 3,
+        });
       }
     }
 
